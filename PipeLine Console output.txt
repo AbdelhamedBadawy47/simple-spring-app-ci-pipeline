@@ -1,0 +1,172 @@
+Started by user Abdelhamed Elbadawy
+Obtained Jenkinsfile from git https://gitlab.com/abdelhamedelbadawy47/java-maven-app.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/JavaMavenipeline
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: git
+using credential gitlab-credentials
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/JavaMavenipeline/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://gitlab.com/abdelhamedelbadawy47/java-maven-app.git # timeout=10
+Fetching upstream changes from https://gitlab.com/abdelhamedelbadawy47/java-maven-app.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+using GIT_ASKPASS to set credentials allow access to the GitLab repository
+ > git fetch --tags --force --progress -- https://gitlab.com/abdelhamedelbadawy47/java-maven-app.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/jenkins-jobs^{commit} # timeout=10
+Checking out Revision af8eae9a615a748b55da394de59c222472902f22 (refs/remotes/origin/jenkins-jobs)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f af8eae9a615a748b55da394de59c222472902f22 # timeout=10
+Commit message: "Edit Jenkinsfile"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Tool Install)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build JAR File)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] echo
+Building the JAR artifact using Maven
+[Pipeline] sh
++ mvn clean package
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------------< com.example:java-maven-app >---------------------
+[INFO] Building java-maven-app 1.1.7
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ java-maven-app ---
+[INFO] Deleting /var/jenkins_home/workspace/JavaMavenipeline/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ java-maven-app ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/JavaMavenipeline/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.6.0:compile (default-compile) @ java-maven-app ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 1 source file to /var/jenkins_home/workspace/JavaMavenipeline/target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ java-maven-app ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/JavaMavenipeline/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.6.0:testCompile (default-testCompile) @ java-maven-app ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 1 source file to /var/jenkins_home/workspace/JavaMavenipeline/target/test-classes
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ java-maven-app ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junit4.JUnit4Provider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running AppTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.164 s -- in AppTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ java-maven-app ---
+[INFO] Building jar: /var/jenkins_home/workspace/JavaMavenipeline/target/java-maven-app-1.1.7.jar
+[INFO] 
+[INFO] --- spring-boot:2.3.5.RELEASE:repackage (default) @ java-maven-app ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  14.110 s
+[INFO] Finished at: 2025-10-05T23:27:11Z
+[INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build and Push Docker Image)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] echo
+Building the Docker image based on the artifact file
+[Pipeline] withCredentials
+Masking supported pattern matches of $PASSWORD
+[Pipeline] {
+[Pipeline] sh
++ docker build -t abdelhamedelbadawy/jenkinsbuiltapplication:javamaven-1.0 .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon   74.8MB
+Step 1/5 : FROM openjdk:8-jre-alpine
+ ---> f7a292bbb70c
+Step 2/5 : EXPOSE 8080
+ ---> Using cache
+ ---> c470a4794564
+Step 3/5 : COPY ./target/java-maven-app-*.jar /usr/app/
+ ---> 70aca64bcd76
+Step 4/5 : WORKDIR /usr/app
+ ---> Running in 4cef4895ceff
+ ---> Removed intermediate container 4cef4895ceff
+ ---> 7cf06d7794e7
+Step 5/5 : CMD java -jar java-maven-app-*.jar
+ ---> Running in 72c78de3e899
+ ---> Removed intermediate container 72c78de3e899
+ ---> 1ca3316f6ed1
+Successfully built 1ca3316f6ed1
+Successfully tagged abdelhamedelbadawy/jenkinsbuiltapplication:javamaven-1.0
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [PASSWORD]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ echo ****
++ docker login -u abdelhamedelbadawy --password-stdin
+Login Succeeded
+[Pipeline] sh
++ docker push abdelhamedelbadawy/jenkinsbuiltapplication:javamaven-1.0
+The push refers to repository [docker.io/abdelhamedelbadawy/jenkinsbuiltapplication]
+57e60b9268d2: Preparing
+edd61588d126: Preparing
+9b9b7f3d56a0: Preparing
+f1b5933fe4b5: Preparing
+edd61588d126: Layer already exists
+f1b5933fe4b5: Layer already exists
+9b9b7f3d56a0: Layer already exists
+57e60b9268d2: Pushed
+javamaven-1.0: digest: sha256:30efd766013209b1f7d38f4fc1b81361097e27d74993f1443e12c109a9d77271 size: 1159
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
