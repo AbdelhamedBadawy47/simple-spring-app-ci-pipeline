@@ -49,7 +49,7 @@ Developer → GitHub Repo → Jenkins CI Pipeline → Maven Build  → Docker Bu
 ### Usage
 1. Clone the repository.  
    ```bash
-   git clone https://github.com/<your-username>/springbuild-ci-pipeline.git
+   git clone https://github.com/AbdelhamedBadawy47/simple-spring-app-ci-pipeline
    ```
 2. Configure Jenkins credentials (`dockerhub-credentials`).  
 3. Run the pipeline manually or via webhook trigger.  
