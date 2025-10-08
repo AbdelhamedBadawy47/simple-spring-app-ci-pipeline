@@ -17,7 +17,7 @@ It ensures every code commit is validated, built, and containerized in a consist
 
 ### Architecture
 ```
-Developer → GitHub Repo → Jenkins CI Pipeline → Maven Build → Unit Tests → Docker Build → Push to Registry
+Developer → GitHub Repo → Jenkins CI Pipeline → Maven Build  → Docker Build → Push to Registry
 ```
 
 ---
