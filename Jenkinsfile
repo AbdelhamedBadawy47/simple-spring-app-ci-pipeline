@@ -50,7 +50,7 @@ pipeline {
 
                 script{
 
-                    withCredentials([usernamePassword(credentialsId: 'gitlabcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+                    withCredentials([usernamePassword(credentialsId: 'githubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
                     
                     sh 'git config username.email "abdelhamed47@gmail.com" '
                     sh 'git config user.name "AbdelhamedBadawy47"'
@@ -68,3 +68,4 @@ pipeline {
         }
     }
 }
+
