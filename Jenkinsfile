@@ -22,7 +22,7 @@ pipeline {
         stage("Build JAR Artifact") {
             steps {
                 echo "Building the JAR artifact using Maven"
-                sh 'mvn clean package -DskipTests'
+                sh 'mvn clean package'
             }
         }
 
@@ -44,6 +44,27 @@ pipeline {
                     }
                 }
             }
+        }
+        stage("Commit the Version updates"){
+            steps{
+
+                script{
+
+                    withCredentials([usernamePassword(credentialsId: 'gitlabcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+                    
+                    sh 'git config username.email "abdelhamed47@gmail.com" '
+                    sh 'git config user.name "AbdelhamedBadawy47"'
+                    sh 'git status'
+                    sh 'git branch'
+                    sh "git remote set-url origin https://${USERNAME}:${PASSWORD}@https://github.com/AbdelhamedBadawy47/simple-spring-app-ci-pipeline.git"
+                    sh 'git add .'
+                    sh 'git commit -m "ci ,Version release completed" '
+                    sh 'git push origin HEAD:main'
+                    sh 'git'
+                     
+                }
+            }
+
         }
     }
 }
