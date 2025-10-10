@@ -6,4 +6,4 @@ COPY target/java-maven-app-*.jar app.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "java-maven-app-*.jar"]
