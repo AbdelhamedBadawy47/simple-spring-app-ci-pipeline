@@ -6,22 +6,42 @@ pipeline {
     }
 
     stages {
-        stage("Build JAR Articatft") {
+        stage("Versioning the Application") {
+            steps {
+                script {
+                    echo "Versioning the application"
+                    sh '''
+                        mvn build-helper:parse-version versions:set \
+                        -DnewVersion=${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion} \
+                        versions:commit
+                    '''
+                }
+            }
+        }
+
+        stage("Build JAR Artifact") {
             steps {
                 echo "Building the JAR artifact using Maven"
-                sh 'mvn clean package'
+                sh 'mvn clean package -DskipTests'
             }
         }
 
         stage("Build and Push Docker Image") {
             steps {
-                echo "Building the Docker image based on the artifact file"
+                script {
+                    echo "Building and pushing Docker image"
 
-                withCredentials([usernamePassword(credentialsId: 'dockerhubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh "docker build -t abdelhamedelbadawy/jenkinsbuiltapplication:javamaven-1.0 ."
-                    sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                    // Extract Maven project version dynamically
+                    def version = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+                    echo "Detected application version: ${version}"
 
-                    sh 'docker push abdelhamedelbadawy/jenkinsbuiltapplication:javamaven-1.0'
+                    withCredentials([usernamePassword(credentialsId: 'dockerhubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh '''
+                            echo $PASSWORD | docker login -u $USERNAME --password-stdin
+                        '''
+                        sh "docker build -t abdelhamedelbadawy/jenkinsbuiltapplication:${version} ."
+                        sh "docker push abdelhamedelbadawy/jenkinsbuiltapplication:${version}"
+                    }
                 }
             }
         }
