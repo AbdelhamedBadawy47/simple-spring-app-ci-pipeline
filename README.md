@@ -3,6 +3,7 @@
 ### Overview
 SpringBuild CI Automation Pipeline is a Jenkins-driven Continuous Integration (CI/CD) project that automates the build, test,  and deploy of the Docker image packaging process for a Spring Framework Java application.  
 It ensures every code commit is validated, built, containerized in a consistent and deployed to EC2 server running a docker container engine in a repeatable way — reducing manual errors and improving delivery speed.
+<img width="1239" height="658" alt="CICD Architecture" src="https://github.com/user-attachments/assets/4390c1be-e1a0-4a12-8c4e-2db099c9b0eb" />
 
 ---
 
